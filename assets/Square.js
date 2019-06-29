@@ -1,4 +1,4 @@
-
+let gameJS = require("Game");
 cc.Class({
     extends: cc.Component,
 
@@ -15,6 +15,10 @@ cc.Class({
         // let colorOrange = cc.Color(255, 124, 72);
         // let colorArray = new Array();
     },
+
+    canFall() {
+        
+    }
 
     // update (dt) {},
 });
