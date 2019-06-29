@@ -55,7 +55,7 @@ cc.Class({
     	for(let i = 1; i <= number; i++) {
 	    	let square = this.squarePool.get();
 	        if(square === null) {
-	        	makeSquare(this.addQuantity);
+	        	this.makeSquare(this.addQuantity);
 	        	this.squarePool.get();
 	        }
 	        square.parent = this.node;
