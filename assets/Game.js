@@ -66,12 +66,19 @@ cc.Class({
         return squareArray;
     },
 
+    /**
+     * clear the square
+     * @param  {cc.Node} square 
+     */
     clearSquare(square) {
+        square.getComponent("Square").onclear();
     	this.squarePool.put(square);
     	this.nowSquareNumber--;
     },
 
-    start () {},
+    start () {
+
+    },
 
     /**
      * judge sqare can connect which direction
@@ -80,9 +87,34 @@ cc.Class({
      * @return {array}         direction array
      */
     canConnect(square1, square2) {
-
+        let connectArray = new Array();
+        for(let i = 0; i < 4; i++) {
+            if(square1.dir[i] != undefined && 
+                square2.dir[this.getOpposite(i)] != undefined) {
+                connectArray.push(i);
+            }
+        }
+        return connectArray;
     },
 
+    /**
+     * get the opposite direction
+     * @param  {number} type [direction type]
+     * @return {number}      [direction type]
+     */
+    getOpposite(type) {
+        let oppositeDir = [2,1,4,3];
+        if(type > 3 || type < 0) {
+            cc.log("type error" + type);
+        }
+        return oppositeDir[type];
+    },
+
+    /**
+     * connect the square
+     * @param  {cc.Node} square1 the square 1
+     * @param  {cc.Node} square2 the square 2
+     */
     connectSquare(square1, square2) {
     	let connectArray = this.canConnect(square1, square2);
     	connectArray.shuffle();
@@ -94,10 +126,15 @@ cc.Class({
     		let Xposition = position.x + squareSize * directionX[type];
     		let Yposition = position.y + squareSize * directionY[type];
     		square2.setPosition(Xposition, Yposition);
-    		
+    		square1.dir[i] = square2;
+            square2.dir[this.getOpposite(i)] = square1;
     	}
     },
 
+    /**
+     * make the ramdom shape
+     * @param  {number} number square quantity
+     */
     makeRandomShape(number) {
     	let squareArray = this.getSquare(number);
     	let baseSquare = squareArray.pop();
