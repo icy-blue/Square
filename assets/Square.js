@@ -18,6 +18,14 @@ cc.Class({
 
     canFall() {
         
+    },
+
+    onClear() {
+        
+    },
+
+    init() {
+        
     }
 
     // update (dt) {},
