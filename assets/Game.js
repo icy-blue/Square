@@ -15,7 +15,9 @@ cc.Class({
     extends: cc.Component,
 
     properties: {
-        fallTime: 0.5,
+        initialSpeed: 100,
+        maxSpeed: 1000,
+        gravity: 980,
         squarePrefab: {
             type: cc.Prefab,
             default: null
@@ -77,7 +79,7 @@ cc.Class({
     },
 
     start () {
-
+        
     },
 
     /**

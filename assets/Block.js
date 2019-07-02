@@ -8,7 +8,7 @@ cc.Class({
 
     
     start () {
-
+        
     },
 
 });

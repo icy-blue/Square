@@ -14,6 +14,17 @@ cc.Class({
         // let colorBlue = cc.Color(43, 169, 254);
         // let colorOrange = cc.Color(255, 124, 72);
         // let colorArray = new Array();
+        let manager = cc.director.getCollisionManager();
+        manager.enabled = true;
+        manager.enabledDebugDraw = true;
+        this.isFalling = true;
+    },
+
+    update(dt) {
+        if(this.isFalling) {
+            this.speed += gameJS.gravity * dt;
+            this.node.y += this.speed * dt;
+        }
     },
 
     canFall() {
