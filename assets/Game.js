@@ -22,19 +22,26 @@ cc.Class({
             type: cc.Prefab,
             default: null
         },
+        blocks: {
+            type: cc.Prefab,
+            default: null
+        },
         initQuantity: 20,
         addQuantity: 5,
         initXPosition: 0,
         initYPosition: 0,
+        squareQuantityInBlocks: 4,
         squareSize: 72
     },
 
     onLoad() {
     	this.nowSquareNumber = 0;
-        this.squarePool = new cc.nodePool();
+        this.squarePool = new cc.NodePool();
         this.makeSquare(this.initQuantity);
 	    this.directionX = new Array(0, 0, 1, -1);
 	    this.directionY = new Array(1, -1, 0, 0);
+        this.isFalling = false;
+        this.blockArray = new Array();
     },
     
     /**
@@ -42,8 +49,10 @@ cc.Class({
      * @param  {number} number square quantity
      */
     makeSquare(number) {
+        // cc.log("lalala");
         for(let i = 1; i <= number; i++) {
             let square = cc.instantiate(this.squarePrefab);
+            square.dir = [];
             this.squarePool.put(square);
         }
     },
@@ -52,21 +61,23 @@ cc.Class({
      * get squares
      * @return {cc.Node} the square node
      */
-    getSquare(number) {
+    getSquare(number, block) {
     	let squareArray = new Array();
     	for(let i = 1; i <= number; i++) {
 	    	let square = this.squarePool.get();
 	        if(square === null) {
 	        	this.makeSquare(this.addQuantity);
-	        	this.squarePool.get();
+	        	square = this.squarePool.get();
 	        }
-	        square.parent = this.node;
-	        square.getComponent("Square").init();
+	        square.parent = block;
+	        square.getComponent("Square").reuse();
 	        this.nowSquareNumber++;
 	        squareArray.push(square);
     	}
         return squareArray;
     },
+
+
 
     /**
      * clear the square
@@ -78,8 +89,19 @@ cc.Class({
     	this.nowSquareNumber--;
     },
 
-    start () {
-        
+    start() {
+
+    },
+
+    update(dt) {
+        if(this.isFalling === false) {
+            this.isFalling = true;
+            this.makeRandomShape(this.squareQuantityInBlocks);
+        }
+    },
+
+    checkClear() {
+
     },
 
     /**
@@ -91,8 +113,8 @@ cc.Class({
     canConnect(square1, square2) {
         let connectArray = new Array();
         for(let i = 0; i < 4; i++) {
-            if(square1.dir[i] != undefined && 
-                square2.dir[this.getOpposite(i)] != undefined) {
+            if(square1.dir[i] == undefined && 
+                square2.dir[this.getOpposite(i)] == undefined) {
                 connectArray.push(i);
             }
         }
@@ -105,7 +127,7 @@ cc.Class({
      * @return {number}      [direction type]
      */
     getOpposite(type) {
-        let oppositeDir = [2,1,4,3];
+        let oppositeDir = [1,0,3,2];
         if(type > 3 || type < 0) {
             cc.log("type error" + type);
         }
@@ -119,18 +141,22 @@ cc.Class({
      */
     connectSquare(square1, square2) {
     	let connectArray = this.canConnect(square1, square2);
+        // cc.log(connectArray);
     	connectArray.shuffle();
     	let type = connectArray.pop();
     	if(type === undefined) {
+            cc.log("ERROR");
     		return false;
     	} else {
     		let position = square1.getPosition();
-    		let Xposition = position.x + squareSize * directionX[type];
-    		let Yposition = position.y + squareSize * directionY[type];
+    		let Xposition = position.x + this.squareSize * this.directionX[type];
+    		let Yposition = position.y + this.squareSize * this.directionY[type];
+            cc.log(position, Xposition, Yposition);
     		square2.setPosition(Xposition, Yposition);
-    		square1.dir[i] = square2;
-            square2.dir[this.getOpposite(i)] = square1;
+    		square1.dir[type] = square2;
+            square2.dir[this.getOpposite(type)] = square1;
     	}
+        // cc.log(square1.dir, square2.dir);
     },
 
     /**
@@ -138,12 +164,18 @@ cc.Class({
      * @param  {number} number square quantity
      */
     makeRandomShape(number) {
-    	let squareArray = this.getSquare(number);
+        let block = cc.instantiate(this.blocks);
+        block.parent = this.node;
+        block.setPosition(0, 0);
+    	let squareArray = this.getSquare(number, block);
     	let baseSquare = squareArray.pop();
+        baseSquare.parent = block;
     	baseSquare.setPosition(this.initXPosition, this.initYPosition);
+        // cc.log(baseSquare.getPosition());
     	for(let i = 1; i < number; i++) {
     		let square = squareArray.pop();
     		this.connectSquare(baseSquare, square);
+            // cc.log(square.getPosition());
     		baseSquare = square;
     	}
     	
