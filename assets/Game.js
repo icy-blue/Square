@@ -151,12 +151,12 @@ cc.Class({
     		let position = square1.getPosition();
     		let Xposition = position.x + this.squareSize * this.directionX[type];
     		let Yposition = position.y + this.squareSize * this.directionY[type];
-            cc.log(position, Xposition, Yposition);
+            // cc.log(position, Xposition, Yposition);
     		square2.setPosition(Xposition, Yposition);
     		square1.dir[type] = square2;
             square2.dir[this.getOpposite(type)] = square1;
     	}
-        // cc.log(square1.dir, square2.dir);
+        return type;
     },
 
     /**
@@ -164,21 +164,29 @@ cc.Class({
      * @param  {number} number square quantity
      */
     makeRandomShape(number) {
+
         let block = cc.instantiate(this.blocks);
+        cc.log(block.getComponent("Block").downSquare);
+
         block.parent = this.node;
-        block.setPosition(0, 0);
+        block.setPosition(this.initXPosition, this.initYPosition);
     	let squareArray = this.getSquare(number, block);
     	let baseSquare = squareArray.pop();
         baseSquare.parent = block;
-    	baseSquare.setPosition(this.initXPosition, this.initYPosition);
+    	baseSquare.setPosition(0, 0);
         // cc.log(baseSquare.getPosition());
+        let count = 0;
     	for(let i = 1; i < number; i++) {
     		let square = squareArray.pop();
-    		this.connectSquare(baseSquare, square);
+    		if(this.connectSquare(baseSquare, square) == 1) {
+                count += 1;
+                cc.log(count);
+            }
             // cc.log(square.getPosition());
     		baseSquare = square;
     	}
-    	
+        cc.log(count);
+        block.getComponent("Block").downSquare += count;
     },
 
     
