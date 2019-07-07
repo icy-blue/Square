@@ -32,7 +32,12 @@ cc.Class({
         // cc.log(this.node.y);
     },
 
-    onCollisionEnter(other, self) {
+    /*onCollisionEnter(other, self) {
+        if(other.node === self.node) {
+            cc.log("OK");
+            return;
+        }
+        cc.log(other.node, self.node);
         cc.log("on Collision");
         this.gameJS.checkClear();
         if(this.CollisionFlag === false) {
@@ -40,9 +45,10 @@ cc.Class({
             this.CollisionFlag = true;
         } else {
             this.isFalling = false;
-            gameJS.collectBlock(self, other);
+            this.gameJS.isFalling = false;
+            this.gameJS.connectBlock(self, other);
         }
-    },
+    },*/
 
 
 });

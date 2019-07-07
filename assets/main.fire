@@ -499,7 +499,7 @@
     "addQuantity": 5,
     "initXPosition": 0,
     "initYPosition": 640,
-    "squareQuantityInBlocks": 5,
+    "squareQuantityInBlocks": 4,
     "squareSize": 72,
     "_id": "f3pji12D5AJKt5/2N9ZZOO"
   }

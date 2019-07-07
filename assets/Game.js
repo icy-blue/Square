@@ -166,7 +166,7 @@ cc.Class({
     makeRandomShape(number) {
 
         let block = cc.instantiate(this.blocks);
-        cc.log(block.getComponent("Block").downSquare);
+        // cc.log(block.getComponent("Block").downSquare);
 
         block.parent = this.node;
         block.setPosition(this.initXPosition, this.initYPosition);
@@ -180,15 +180,17 @@ cc.Class({
     		let square = squareArray.pop();
     		if(this.connectSquare(baseSquare, square) == 1) {
                 count += 1;
-                cc.log(count);
+                // cc.log(count);
             }
             // cc.log(square.getPosition());
     		baseSquare = square;
     	}
-        cc.log(count);
+        // cc.log(count);
         block.getComponent("Block").downSquare += count;
     },
 
-    
+    connectBlock() {
+        
+    }
     // update (dt) {},
 });
