@@ -164,34 +164,72 @@ cc.Class({
      * @param  {number} number square quantity
      */
     makeRandomShape(number) {
-
-
         let block = cc.instantiate(this.blocks);
-        // cc.log(block.getComponent("Block").downSquare);
-
         block.parent = this.node;
         block.setPosition(this.initXPosition, this.initYPosition);
     	let squareArray = this.getSquare(number, block);
     	let baseSquare = squareArray.pop();
         baseSquare.parent = block;
     	baseSquare.setPosition(0, 0);
-        // cc.log(baseSquare.getPosition());
+        let blockJS = block.getComponent("Block");
+        blockJS.son.push(baseSquare);
         let count = 0;
     	for(let i = 1; i < number; i++) {
     		let square = squareArray.pop();
-    		if(this.connectSquare(baseSquare, square) == 1) {
-                count += 1;
-                // cc.log(count);
-            }
-            // cc.log(square.getPosition());
+    		let type = this.connectSquare(baseSquare, square);
+            blockJS.dirType[type] ++;
+            blockJS.son.push(square);
     		baseSquare = square;
     	}
-        // cc.log(count);
-        block.getComponent("Block").downSquare += count;
     },
 
-    connectBlock() {
-        
+    /**
+     * replace the block
+     * @param  {cc.Node} block the block node
+     */
+    replaceBlock(block) {
+        let pos = Math.ceil((block.x + 360) / this.squareSize);
+        block.x = pos * squareSize - 360;
+    },
+
+    /**
+     * get every position in the block
+     * @param  {cc.Node} block 
+     * @return {Array}   the position array
+     */
+    getMapPos(block) {
+        let squareArray = block.getComponent("Block").son;
+        let posArray = [];
+        for(square in squareArray) {
+            let posX = (block.x + square.x + 360) / this.squareSize;
+            let posY = (block.y + square.y + 640) / this.squareSize;
+            posArray.push(cc.v2(posX, posY));
+        }
+        return posArray;
+    },
+
+    /**
+     * connect the block
+     * @param  {cc.Node} blockA the block A
+     * @param  {cc.Node} blockB the block B
+     */
+    connectBlock(blockA, blockB) {
+        this.replaceBlock(blockA);
+        this.replaceBlock(blockB);
+        let posArrayA = this.getMapPos(blockA);
+        let posArrayB = this.getMapPos(blockB);
+        for(square1 in posArrayA) {
+            for(square2 in posArrayB) {
+                for(let i = 0; i < 4; i++) {
+                    if(square2.x - square1.x == this.Xposition[i]
+                        && square2.y - square1.y == this.Yposition[i]) {
+                        let oppositeDir = this.getOpposite(i);
+                        square1.dir[i] = square2;
+                        square2.dir[oppositeDir] = square1;
+                    }  
+                }
+            }
+        }
+
     }
-    // update (dt) {},
 });

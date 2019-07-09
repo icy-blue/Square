@@ -15,7 +15,11 @@ cc.Class({
         this.isFalling = true;
         this.speed = 0;
         this.CollisionFlag = false;
-        this.downSquare = 0.5;
+        this.dirType = [];
+        for(let i = 0; i < 4; i++) {
+            this.dirType[i] = 0;
+        }
+        this.son = [];
     },
 
     update(dt) {
@@ -24,7 +28,7 @@ cc.Class({
             this.speed += this.gameJS.gravity * dt;
             this.speed = Math.min(this.speed, this.gameJS.maxSpeed);
             this.node.y -= this.speed * dt;
-            if(this.node.y <= -640 + this.downSquare * this.gameJS.squareSize) {
+            if(this.node.y <= -640 + this.dirType[1] * this.gameJS.squareSize) {
                 this.isFalling = false;
                 this.gameJS.isFalling = false;
             }
