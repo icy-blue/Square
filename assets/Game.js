@@ -165,6 +165,7 @@ cc.Class({
      */
     makeRandomShape(number) {
 
+
         let block = cc.instantiate(this.blocks);
         // cc.log(block.getComponent("Block").downSquare);
 

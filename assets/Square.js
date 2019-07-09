@@ -35,7 +35,15 @@ cc.Class({
         this.gameJS.checkClear();
         let selfBlockJS = self.node.getComponent("Block");
         let otherBlockJS = self.node.getComponent("Block");
-        
+        if(selfBlockJS.isFalling === true && otherBlockJS.isFalling === false) {
+            if(selfBlockJS.collisionFlag === false) {
+                selfBlockJS.speed *= -0.5;
+                sbjs.collisionFlag = true;
+            } else {
+                selfBlockJS.isFalling = false;
+                this.gameJS.connectBlock();
+            }
+        }        
     }
 
     
