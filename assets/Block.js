@@ -3,10 +3,9 @@ cc.Class({
     extends: cc.Component,
 
     properties: {
-        
+
     },
 
-    
     onLoad() {
         this.gameJS = cc.find("Canvas").getComponent("Game");
         let manager = cc.director.getCollisionManager();

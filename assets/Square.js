@@ -2,7 +2,7 @@ cc.Class({
     extends: cc.Component,
 
     properties: {
-        
+
     },
 
     reuse() {
@@ -16,15 +16,15 @@ cc.Class({
     },
 
     canFall() {
-        
+
     },
 
     onClear() {
-        
+
     },
 
     init() {
-        
+
     },
 
     onCollisionEnter(other, self) {
@@ -43,8 +43,6 @@ cc.Class({
                 selfBlockJS.isFalling = false;
                 this.gameJS.connectBlock();
             }
-        }        
+        }
     }
-
-    
 });

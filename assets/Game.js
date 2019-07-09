@@ -43,13 +43,12 @@ cc.Class({
         this.isFalling = false;
         this.blockArray = new Array();
     },
-    
+
     /**
      * make squares
      * @param  {number} number square quantity
      */
     makeSquare(number) {
-        // cc.log("lalala");
         for(let i = 1; i <= number; i++) {
             let square = cc.instantiate(this.squarePrefab);
             square.dir = [];
@@ -81,7 +80,7 @@ cc.Class({
 
     /**
      * clear the square
-     * @param  {cc.Node} square 
+     * @param  {cc.Node} square
      */
     clearSquare(square) {
         square.getComponent("Square").onclear();
@@ -113,7 +112,7 @@ cc.Class({
     canConnect(square1, square2) {
         let connectArray = new Array();
         for(let i = 0; i < 4; i++) {
-            if(square1.dir[i] == undefined && 
+            if(square1.dir[i] == undefined &&
                 square2.dir[this.getOpposite(i)] == undefined) {
                 connectArray.push(i);
             }
@@ -194,7 +193,7 @@ cc.Class({
 
     /**
      * get every position in the block
-     * @param  {cc.Node} block 
+     * @param  {cc.Node} block
      * @return {Array}   the position array
      */
     getMapPos(block) {
@@ -226,7 +225,7 @@ cc.Class({
                         let oppositeDir = this.getOpposite(i);
                         square1.dir[i] = square2;
                         square2.dir[oppositeDir] = square1;
-                    }  
+                    }
                 }
             }
         }
