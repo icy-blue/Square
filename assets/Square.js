@@ -31,17 +31,19 @@ cc.Class({
         if(other.node.parent == self.node.parent) {
             return;
         }
-        cc.log("Collision");
         this.gameJS.checkClear();
-        let selfBlockJS = self.node.getComponent("Block");
-        let otherBlockJS = self.node.getComponent("Block");
+        let selfBlockJS = self.node.parent.getComponent("Block");
+        let otherBlockJS = other.node.parent.getComponent("Block");
         if(selfBlockJS.isFalling === true && otherBlockJS.isFalling === false) {
             if(selfBlockJS.collisionFlag === false) {
                 selfBlockJS.speed *= -0.5;
-                sbjs.collisionFlag = true;
+                selfBlockJS.collisionFlag = true;
             } else {
-                selfBlockJS.isFalling = false;
-                this.gameJS.connectBlock();
+                let flag = this.gameJS.connectBlock(self.node._parent, other.node._parent);
+                if(flag === true) {
+                    selfBlockJS.isFalling = false;
+                    this.gameJS.isFalling = false;
+                }
             }
         }
     }

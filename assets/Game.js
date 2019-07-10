@@ -31,7 +31,8 @@ cc.Class({
         initXPosition: 0,
         initYPosition: 0,
         squareQuantityInBlocks: 4,
-        squareSize: 72
+        squareSize: 72,
+        eps: 1e-1
     },
 
     onLoad() {
@@ -140,7 +141,6 @@ cc.Class({
      */
     connectSquare(square1, square2) {
     	let connectArray = this.canConnect(square1, square2);
-        // cc.log(connectArray);
     	connectArray.shuffle();
     	let type = connectArray.pop();
     	if(type === undefined) {
@@ -150,7 +150,6 @@ cc.Class({
     		let position = square1.getPosition();
     		let Xposition = position.x + this.squareSize * this.directionX[type];
     		let Yposition = position.y + this.squareSize * this.directionY[type];
-            // cc.log(position, Xposition, Yposition);
     		square2.setPosition(Xposition, Yposition);
     		square1.dir[type] = square2;
             square2.dir[this.getOpposite(type)] = square1;
@@ -178,7 +177,17 @@ cc.Class({
     		let type = this.connectSquare(baseSquare, square);
             blockJS.dirType[type] ++;
             blockJS.son.push(square);
-    		baseSquare = square;
+            let flag = false;
+            if(Math.random() >= 0.8) {
+                for(let i = 0; i < 4; i++) {
+                    if(baseSquare.dir[i] === undefined) {
+                        flag = true;
+                    }
+                }
+            }
+            if(flag === false) {
+                baseSquare = square;
+            }
     	}
     },
 
@@ -187,8 +196,8 @@ cc.Class({
      * @param  {cc.Node} block the block node
      */
     replaceBlock(block) {
-        let pos = Math.ceil((block.x + 360) / this.squareSize);
-        block.x = pos * squareSize - 360;
+        let pos = Math.ceil((block.x + 360) / this.squareSize + 0.5) - 0.5;
+        block.x = pos * this.squareSize - 360;
     },
 
     /**
@@ -198,10 +207,11 @@ cc.Class({
      */
     getMapPos(block) {
         let squareArray = block.getComponent("Block").son;
+        let arrayLength = squareArray.length;
         let posArray = [];
-        for(square in squareArray) {
-            let posX = (block.x + square.x + 360) / this.squareSize;
-            let posY = (block.y + square.y + 640) / this.squareSize;
+        for(let i = 0; i < arrayLength; i++) {
+            let posX = (block.x + squareArray[i].x + 360) / this.squareSize - 0.5;
+            let posY = (block.y + squareArray[i].y + 640) / this.squareSize - 0.5;
             posArray.push(cc.v2(posX, posY));
         }
         return posArray;
@@ -213,22 +223,28 @@ cc.Class({
      * @param  {cc.Node} blockB the block B
      */
     connectBlock(blockA, blockB) {
+        let flag = false;
         this.replaceBlock(blockA);
         this.replaceBlock(blockB);
         let posArrayA = this.getMapPos(blockA);
         let posArrayB = this.getMapPos(blockB);
-        for(square1 in posArrayA) {
-            for(square2 in posArrayB) {
+        let squareArrayA = blockA.getComponent("Block").son;
+        let squareArrayB = blockB.getComponent("Block").son;
+        let arrayLengthA = posArrayA.length;
+        let arrayLengthB = posArrayB.length;
+        for(let j = 0; j < arrayLengthA; j++) {
+            for(let k = 0; k < arrayLengthB; k++) {
                 for(let i = 0; i < 4; i++) {
-                    if(square2.x - square1.x == this.Xposition[i]
-                        && square2.y - square1.y == this.Yposition[i]) {
+                    if(Math.abs(posArrayB[k].x - posArrayA[j].x - this.directionX[i]) <= this.eps
+                        && Math.abs(posArrayB[k].y - posArrayA[j].y - this.directionY[i]) <= this.eps) {
                         let oppositeDir = this.getOpposite(i);
-                        square1.dir[i] = square2;
-                        square2.dir[oppositeDir] = square1;
+                        squareArrayA[j].dir[i] = squareArrayB[k];
+                        squareArrayB[k].dir[oppositeDir] = squareArrayA[j];
+                        flag = true;
                     }
                 }
             }
         }
-
+        return flag;
     }
 });
