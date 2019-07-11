@@ -15,10 +15,6 @@ cc.Class({
         // cc.log(this.node.y);
     },
 
-    canFall() {
-
-    },
-
     onClear() {
 
     },
