@@ -210,8 +210,8 @@ cc.Class({
         let arrayLength = squareArray.length;
         let posArray = [];
         for(let i = 0; i < arrayLength; i++) {
-            let posX = (block.x + squareArray[i].x + 360) / this.squareSize - 0.5;
-            let posY = (block.y + squareArray[i].y + 640) / this.squareSize - 0.5;
+            let posX = (block.x + squareArray[i].x + 360) / this.squareSize + 0.5;
+            let posY = (block.y + squareArray[i].y + 640) / this.squareSize + 0.5;
             posArray.push(cc.v2(posX, posY));
         }
         return posArray;
@@ -232,6 +232,7 @@ cc.Class({
         let squareArrayB = blockB.getComponent("Block").son;
         let arrayLengthA = posArrayA.length;
         let arrayLengthB = posArrayB.length;
+        cc.log(posArrayA, posArrayB);
         for(let j = 0; j < arrayLengthA; j++) {
             for(let k = 0; k < arrayLengthB; k++) {
                 for(let i = 0; i < 4; i++) {

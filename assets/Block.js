@@ -12,7 +12,7 @@ cc.Class({
         manager.enabled = true;
         // manager.enabledDebugDraw = true;
         this.isFalling = true;
-        this.speed = 0;
+        this.fallingSpeed = 0;
         this.collisionFlag = false;
         this.dirType = [];
         for(let i = 0; i < 4; i++) {
@@ -24,14 +24,17 @@ cc.Class({
     update(dt) {
         // cc.log(this.node.y);
         if(this.isFalling) {
-            this.speed += this.gameJS.gravity * dt;
-            this.speed = Math.min(this.speed, this.gameJS.maxSpeed);
-            this.node.y -= this.speed * dt;
+            this.fallingSpeed += this.gameJS.gravity * dt;
+            this.fallingSpeed = Math.min(this.fallingSpeed, this.gameJS.maxSpeed);
+            this.node.y -= this.fallingSpeed * dt;
             if(this.node.y <= -640 + this.dirType[1] * this.gameJS.squareSize) {
                 this.isFalling = false;
                 this.gameJS.isFalling = false;
             }
         }
+        // if(this.isMove) {
+            
+        // }
     },
 
 });
