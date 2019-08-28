@@ -44,7 +44,7 @@ cc.Class({
 	    this.directionY = new Array(1, -1, 0, 0);
         this.isFalling = null;
         this.blockArray = new Array();
-        this.colorArray = [cc.Color.MAGENTA, cc.Color.ORANGE, cc.Color.YELLOW, cc.Color.CYAN];
+        this.colorArray = [cc.Color.MAGENTA, cc.Color.ORANGE, cc.Color.YELLOW, cc.Color.CYAN, cc.Color.GREEN];
     },
 
     /**
