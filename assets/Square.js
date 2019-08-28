@@ -12,8 +12,18 @@ cc.Class({
         this.node.on('touchstart', function (event) {
             this.touchUpdate(event);
         }, this);
+
         // this.node.on('touchend', this.touchEnd(), this);
         // this.node.on('touchcancel', this.touchEnd(), this);
+    },
+
+    /**
+     * change the color
+     *
+     * @param      {cc.Color}  color   The color type
+     */
+    changeColor(color) {
+        this.node.children[1].color = color;
     },
 
     touchUpdate(event) {

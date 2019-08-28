@@ -44,6 +44,7 @@ cc.Class({
 	    this.directionY = new Array(1, -1, 0, 0);
         this.isFalling = null;
         this.blockArray = new Array();
+        this.colorArray = [cc.Color.MAGENTA, cc.Color.ORANGE, cc.Color.YELLOW, cc.Color.CYAN];
     },
 
     /**
@@ -158,6 +159,22 @@ cc.Class({
     },
 
     /**
+     * 返回[min_num, max_num] 中的任意整数
+     * @author himself65
+     * @param  {number} min_num 最小值
+     * @param  {number} max_num 最大值
+     *
+     * @returns {number}
+     */
+    randomNumber(min_num, max_num) {
+      if (min_num === null || max_num === null) {
+        cc.error("null param");
+        return 0;
+      }
+      return parseInt(Math.random() * (max_num - min_num + 1) + min_num, 10);
+    },
+
+    /**
      * make the ramdom shape
      * @param  {number} number square quantity
      */
@@ -172,12 +189,15 @@ cc.Class({
         let blockJS = block.getComponent("Block");
         blockJS.son.push(baseSquare);
         let count = 0;
+        let color = this.colorArray[this.randomNumber(0, this.colorArray.length - 1)];
+        baseSquare.getComponent("Square").changeColor(color);
     	for(let i = 1; i < number; i++) {
     		let square = squareArray.pop();
+            square.getComponent("Square").changeColor(color);
     		let type = this.connectSquare(baseSquare, square);
             blockJS.dirType[type] ++;
             blockJS.son.push(square);
-            let flag = false;
+            let flag = false; //为了出现半十字型块
             if(Math.random() >= 0.8) {
                 for(let i = 0; i < 4; i++) {
                     if(baseSquare.dir[i] === undefined) {
