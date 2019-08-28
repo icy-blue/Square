@@ -32,7 +32,8 @@ cc.Class({
         initYPosition: 0,
         squareQuantityInBlocks: 4,
         squareSize: 72,
-        eps: 1e-1
+        eps: 1e-1,
+        bounceRatio: 0.8
     },
 
     onLoad() {
@@ -41,7 +42,7 @@ cc.Class({
         this.makeSquare(this.initQuantity);
 	    this.directionX = new Array(0, 0, 1, -1);
 	    this.directionY = new Array(1, -1, 0, 0);
-        this.isFalling = false;
+        this.isFalling = null;
         this.blockArray = new Array();
     },
 
@@ -94,9 +95,8 @@ cc.Class({
     },
 
     update(dt) {
-        if(this.isFalling === false) {
-            this.isFalling = true;
-            this.makeRandomShape(this.squareQuantityInBlocks);
+        if(this.isFalling === null) {
+            this.isFalling = this.makeRandomShape(this.squareQuantityInBlocks);
         }
     },
 
@@ -189,6 +189,7 @@ cc.Class({
                 baseSquare = square;
             }
     	}
+        return block;
     },
 
     /**
@@ -224,8 +225,8 @@ cc.Class({
      */
     connectBlock(blockA, blockB) {
         let flag = false;
-        this.replaceBlock(blockA);
-        this.replaceBlock(blockB);
+        // this.replaceBlock(blockA);
+        // this.replaceBlock(blockB);
         let posArrayA = this.getMapPos(blockA);
         let posArrayB = this.getMapPos(blockB);
         let squareArrayA = blockA.getComponent("Block").son;
