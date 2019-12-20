@@ -28,19 +28,25 @@ cc.Class({
 
     touchUpdate(event) {
         let block = this.node.parent;
-        cc.log(block.getComponent("Block").canMove === true);
+        // cc.log(block.getComponent("Block").canMove === true);
         if(block.getComponent("Block").canMove === true) {
             let _x = block.getPosition().x;
             this.schedule(function() {
                 if(block.getComponent("Block").canMove === false) {
                     this.touchEnd();
                 }
-                let deltax = event.getLocationX() - event.getStartLocation().x;
-                let nowY = block.getPosition().y;
-                block.setPosition(_x + deltax, nowY);
-                this.gameJS.replaceBlock(block);
+                if(this.checkValidMove()){
+                    let deltax = event.getLocationX() - event.getStartLocation().x;
+                    let nowY = block.getPosition().y;
+                    block.setPosition(_x + deltax, nowY);
+                    this.gameJS.replaceBlock(block);
+                }
             }, 0.2);
         }
+    },
+
+    checkValidMove() {
+        return true;
     },
 
     touchEnd() {
